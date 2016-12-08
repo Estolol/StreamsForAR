@@ -1,16 +1,16 @@
+(*
 open Streams
 open Stringtrees
 open Conversion
-
+ *)
 
 let rec print_wordlist_aux (l:word list)  = match l with
   |[]->()
   |x::r->print_string (string_of_word x);
-         print_string " ";;
+         print_string " ";
+         print_wordlist_aux r;;
       
 let print_wordlist (l:word list) =
-  print_newline();
-  print_string "Printing list: ";
   print_wordlist_aux l;;
   
 let print_stream (s:word stream) (m:int) (arg:word) =
@@ -53,7 +53,7 @@ let print_pipetree (t:stringtree pipetree) =
   k:=1;   
   let rec auxtwo t = match t with
     |Leaf(stringt)->print_newline();
-              print_string("Printing tree t");
+              print_string("Printing tree stringtree");
               print_int(!k);
               k:=(!k)+1;
               print_string(": ");

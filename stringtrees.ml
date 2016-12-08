@@ -59,7 +59,7 @@ let add_to_tree (word:word) (t:stringtree) = add_to_tree_aux word t word
                        
            
                
-(* to make a tree with size elements, we just start from an empty tree, then generate an element an add it to the tree size times *)               
+(* to make a tree with at most size elements, we just start from an empty tree, then generate an element an add it to the tree size times *)              (* we can have a tree size strictly lower than size if we pick the same word at random several times*) 
 let rec make_tree (size:int) = match size with
   |0->Nil
   |_->let tprime = make_tree (size-1) in
@@ -89,12 +89,11 @@ let rec diff (w1:word) (w2:word) = match w1 with
               []
          |y::q->diff r q
 
-(* returns the subtree of t found after moving following the path path *)                     
+(* returns the subtree of t found after moving following the path path, returns Nil if the path leads nowhere *)
 let rec move (t:stringtree) (path:word) = match path with
                     |[]->t
                     |x::r->match t with
-                           |Nil->print_string("Error");
-                                 t
+                           |Nil->Nil
                            |Node(w,a,b,c)->match x with
                                            |A->move a r
                                            |B->move b r
@@ -131,7 +130,11 @@ let rec find_next (t:stringtree) = match t with
     |(Nil,Nil,Nil)->(Some(w),Nil)     
     |_->(Some(w),Node([],a,b,c))
                                           
-                                  
+(* Computes the size of a stringtree *)                                  
+let rec size (t:stringtree) = match t with  
+  |Nil->0
+  |Node(w,a,b,c) when w=[]->(size a) + (size b) + (size c)
+  |Node(w,a,b,c)->1+(size a)+(size b)+(size c);;
                                     
 
       
