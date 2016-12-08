@@ -130,8 +130,8 @@ let rec find_next (t:stringtree) = match t with
     |(Nil,Nil,Nil)->(Some(w),Nil)     
     |_->(Some(w),Node([],a,b,c))
                                           
-(* Computes the size of a stringtree *)                                  
-let rec size (t:stringtree) = match t with  
+(* Computes the size of a stringtree *)
+let rec size (t:stringtree) = match t with
   |Nil->0
   |Node(w,a,b,c) when w=[]->(size a) + (size b) + (size c)
   |Node(w,a,b,c)->1+(size a)+(size b)+(size c);;

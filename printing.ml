@@ -1,9 +1,3 @@
-(*
-open Streams
-open Stringtrees
-open Conversion
- *)
-
 let rec print_wordlist_aux (l:word list)  = match l with
   |[]->()
   |x::r->print_string (string_of_word x);
