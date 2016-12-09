@@ -12,7 +12,7 @@ let print_stream (s:word stream) (m:int) (arg:word) =
   print_string("printing strm: ");
   let rec aux s m=match (s arg,m) with
     |(_,0)->()
-    |(Endofstream,_)->()
+    |(Endofstream,_)->print_string "Stream ended";
     |(Timeout(sprime),m)->(aux sprime m)
     |(Cons(x,r),m)->print_string (string_of_word x);
                           print_string(" ");
@@ -26,7 +26,7 @@ let print_stream (s:word stream) (m:int) (arg:word) =
 let print_pipetree (t:stringtree pipetree) =
   print_newline();
   let k=ref 1 in
-  print_string("Structure: ");
+  print_string "Structure: ";
   let rec aux t = match t with
     |Leaf(stringt)->print_string("Leaf{stringtree");
               print_int(!k);
@@ -44,14 +44,16 @@ let print_pipetree (t:stringtree pipetree) =
               print_string(")");
   in aux t;
   print_newline();
-  k:=1;   
+  k:=1;
+  print_string "Content: ";
+  print_newline ();
   let rec auxtwo t = match t with
     |Leaf(stringt)->print_newline();
               print_string("Printing tree stringtree");
               print_int(!k);
               k:=(!k)+1;
               print_string(": ");
-              print_wordlist (list_of_tree stringt);
+              print_wordlist (list_of_tree stringt []);
     |AND(g,d)->auxtwo g;
                auxtwo d;
     |OR(g,d)->auxtwo g;

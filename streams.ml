@@ -8,7 +8,7 @@ type 'a pipetree = AND of 'a pipetree * 'a pipetree | OR of 'a pipetree * 'a pip
                   
     
 (* The or_ and and_ combine functions *)
-let rec or_combine (flot1:'a stream) (flot2:'a stream) =
+let rec or_combine (flot1:word stream) (flot2:word stream) =
   let or_stream arg =
     match flot1 arg with
     |Endofstream->flot2 arg
@@ -17,11 +17,18 @@ let rec or_combine (flot1:'a stream) (flot2:'a stream) =
                  |Timeout(sprime)->Timeout(or_combine s sprime)
                  |Cons(b,flot3)->Cons(b, or_combine s flot3)
                   end  
-    |Cons(a,flot3)->Cons(a,or_combine flot2 flot3)
+    |Cons(a,flot3)->match flot2 arg with
+                    |Endofstream->Cons(a,flot3)
+                    |Timeout(s)->Cons(a,or_combine s flot3)
+                    |Cons(b,flot4)->let f arg = match (prefix arg b) with
+                                      |true->Cons(b,or_combine flot3 flot4)
+                                      |false->Timeout(or_combine flot3 flot4)
+                                    in
+                                    Cons(a,f)
   in or_stream
 
 (* left_to_right is needed for and_combine, it simply loops over elements from the first stream and applies them to the second *)     
-let rec left_to_right (flot1:'a stream) (flot2: 'a stream) =
+let rec left_to_right (flot1:word stream) (flot2:word stream) =
   let ltr_stream arg=
     match flot1 arg with
     |Endofstream->Endofstream
@@ -30,10 +37,11 @@ let rec left_to_right (flot1:'a stream) (flot2: 'a stream) =
                     |Endofstream->Timeout(left_to_right flot3 flot2)
                     |Timeout(s)->Timeout(or_combine (left_to_right flot3 flot2) s)
                     |Cons(b,flot4)->Cons(b,or_combine (left_to_right flot3 flot2) flot4)
+                      
   in ltr_stream
   
                                     
        
-let rec and_combine (flot1:'a stream) (flot2:'a stream) =
+let rec and_combine (flot1:word stream) (flot2:word stream) =
   or_combine (left_to_right flot1 flot2) (left_to_right flot2 flot1)
   
