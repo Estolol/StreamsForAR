@@ -1,12 +1,14 @@
+open Stringtrees
+
 (* Defining types *)
 (* A stream required an argument to be computed. Once computed it is either empty (Endofstream), a timeout with a new stream to call, or an output and a remainer stream *)
 type 'a comp_stream = Endofstream | Timeout of ('a stream) | Cons of 'a * ('a stream)
 and 'a stream = 'a->'a comp_stream
 
-(* a pipetree is used to store complex combinations of streams, it shows how different streams should be combined to form a new stream *)                       
+(* a pipetree is used to store complex combinations of streams, it shows how different streams should be combined to form a new stream *)
 type 'a pipetree = AND of 'a pipetree * 'a pipetree | OR of 'a pipetree * 'a pipetree | Leaf of 'a
-                  
-    
+
+
 (* The or_ and and_ combine functions *)
 let rec or_combine (flot1:word stream) (flot2:word stream) =
   let or_stream arg =
@@ -16,7 +18,7 @@ let rec or_combine (flot1:word stream) (flot2:word stream) =
                  |Endofstream->Timeout(s)
                  |Timeout(sprime)->Timeout(or_combine s sprime)
                  |Cons(b,flot3)->Cons(b, or_combine s flot3)
-                  end  
+                  end
     |Cons(a,flot3)->match flot2 arg with
                     |Endofstream->Cons(a,flot3)
                     |Timeout(s)->Cons(a,or_combine s flot3)
@@ -27,7 +29,7 @@ let rec or_combine (flot1:word stream) (flot2:word stream) =
                                     Cons(a,f)
   in or_stream
 
-(* left_to_right is needed for and_combine, it simply loops over elements from the first stream and applies them to the second *)     
+(* left_to_right is needed for and_combine, it simply loops over elements from the first stream and applies them to the second *)
 let rec left_to_right (flot1:word stream) (flot2:word stream) =
   let ltr_stream arg=
     match flot1 arg with
@@ -37,11 +39,10 @@ let rec left_to_right (flot1:word stream) (flot2:word stream) =
                     |Endofstream->Timeout(left_to_right flot3 flot2)
                     |Timeout(s)->Timeout(or_combine (left_to_right flot3 flot2) s)
                     |Cons(b,flot4)->Cons(b,or_combine (left_to_right flot3 flot2) flot4)
-                      
+
   in ltr_stream
-  
-                                    
-       
+
+
+
 let rec and_combine (flot1:word stream) (flot2:word stream) =
   or_combine (left_to_right flot1 flot2) (left_to_right flot2 flot1)
-  

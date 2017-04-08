@@ -1,0 +1,12 @@
+OASISFormat: 0.4
+Name:        StreamsForAR
+Version:     0.4
+Synopsis:    Using instance streams for a fair exploration of search spaces.
+Authors:     Edouard Dufour Sans
+License:     MIT
+
+Executable main
+  Path:       src
+  BuildTools: ocamlbuild
+  MainIs:     main.ml
+  

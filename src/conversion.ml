@@ -1,3 +1,6 @@
+open Stringtrees
+open Streams
+
 let rec char_list_of_word (w:word) = match w with
   |[]->[]
   |x::r->let lprime = char_list_of_word r in
@@ -5,11 +8,11 @@ let rec char_list_of_word (w:word) = match w with
          |A->'a'::lprime
          |B->'b'::lprime
          |C->'c'::lprime
-                    
+
 let string_of_word (w:word) = String.concat "" (List.map (String.make 1) (char_list_of_word w))
 
-                                      
-    
+
+
 (* Creating an actual stream from a stringtree. *)
 let rec stream_of_tree_aux (t: stringtree) (position:word) (arg:word) =
   match t with
@@ -49,7 +52,7 @@ let rec list_of_tree_aux (t:stringtree) (l:word list) = match t with
     match w with
     |[]->l3
     |_->w::l3
-             
+
 let list_of_tree (t:stringtree) (arg:word) = list_of_tree_aux (move t arg) []
 
 let rec insert (x:'a) (l:'a list) = match l with
@@ -64,7 +67,7 @@ let rec merge (l1:'a list) (l2:'a list) = match l1 with
 let rec has_prefix (w:word) (l:word list) = match l with
   |[]->false
   |x::r->(prefix x w)||(has_prefix w r)
-                         
+
 let rec left_to_right_list (l:word list) (t:stringtree pipetree) = match l with
   |[]->[]
   |x::r->(merge (list_of_pipetree t x) (left_to_right_list r t))

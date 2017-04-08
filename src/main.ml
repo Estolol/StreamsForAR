@@ -1,14 +1,21 @@
+open Stringtrees
+open Streams
+open Conversion
+open Printing
+open Testing
+
+
 (* creating a bunch of stringtrees and a pipetree *)
 let create_big_pipetree () =
   let v=make 7 40 in
   let (t1,t2,t3,t4,t5,t6,t7)=(v.(0),v.(1),v.(2),v.(3),v.(4),v.(5),v.(6)) in
   AND(OR(AND(AND(AND(Leaf(t1),Leaf(t2)),OR(Leaf(t3),Leaf(t4))),Leaf(t5)),Leaf(t6)),Leaf(t7));;
-  
+
 let create_small_pipetree () =
   let v=make 4 10 in
   let (t1,t2,t3,t4)=(v.(0),v.(1),v.(2),v.(3)) in
   AND(AND(Leaf(t1),Leaf(t2)),OR(Leaf(t3),Leaf(t4)));;
-  
+
 (* final testing function *)
 let test (t:stringtree pipetree)  (stream_display:int) (arg:word) =
   print_pipetree t;

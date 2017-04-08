@@ -1,12 +1,16 @@
+open Stringtrees
+open Streams
+open Conversion
+
 let rec print_wordlist_aux (l:word list)  = match l with
   |[]->()
   |x::r->print_string (string_of_word x);
          print_string " ";
          print_wordlist_aux r;;
-      
+
 let print_wordlist (l:word list) =
   print_wordlist_aux l;;
-  
+
 let print_stream (s:word stream) (m:int) (arg:word) =
   print_newline();
   print_string("printing strm: ");
@@ -21,8 +25,8 @@ let print_stream (s:word stream) (m:int) (arg:word) =
   aux s m;
   print_newline();;
 
-  
-                                            
+
+
 let print_pipetree (t:stringtree pipetree) =
   print_newline();
   let k=ref 1 in

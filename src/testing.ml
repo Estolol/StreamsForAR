@@ -1,3 +1,7 @@
+open Stringtrees
+open Streams
+open Conversion
+
 let rec remove (x:'a) (l:'a list) = match l with
   |[]->[]
   |y::r when y=x->r
@@ -8,7 +12,7 @@ let rec print_list (l:word list) = match l with
   |w::r->print_string (string_of_word w);
          print_string " ";
          print_list r;;
-  
+
 (* stream testing function: we compare the stream's outputs to the expected outputs computed from the trees *)
 let test_stream (t:stringtree pipetree) (s:word stream) (m:int) (arg:word) =
   print_newline();
